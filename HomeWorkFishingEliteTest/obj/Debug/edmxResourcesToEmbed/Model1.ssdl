@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище FishingEliteModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="category">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nchar" MaxLength="64" Nullable="false" />
+  </EntityType>
+  <EntityType Name="employee">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="login" Type="nchar" MaxLength="300" Nullable="false" />
+    <Property Name="password" Type="nchar" MaxLength="300" Nullable="false" />
+    <Property Name="Surname" Type="nchar" MaxLength="120" Nullable="false" />
+    <Property Name="FirstName" Type="nchar" MaxLength="120" Nullable="false" />
+  </EntityType>
+  <EntityType Name="fish_status">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fishing_asset_id" Type="int" Nullable="false" />
+    <Property Name="fish_status" Type="nchar" MaxLength="32" Nullable="false" />
+    <Property Name="population_name" Type="nchar" MaxLength="300" Nullable="false" />
+  </EntityType>
+  <EntityType Name="fishing_asset">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="created_at" Type="date" Nullable="false" />
+    <Property Name="title" Type="nchar" MaxLength="64" Nullable="false" />
+    <Property Name="category_id" Type="int" Nullable="false" />
+    <Property Name="catch_cost_per" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="count_of_individuals" Type="int" Nullable="false" />
+    <Property Name="description" Type="text" Nullable="false" />
+  </EntityType>
+  <EntityType Name="fishing_tourists">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fishing_asset_id" Type="int" Nullable="false" />
+    <Property Name="fishing_data" Type="date" Nullable="false" />
+    <Property Name="fishing_result" Type="int" Nullable="false" />
+    <Property Name="employee_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="responsbilities">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="employee_id" Type="int" Nullable="false" />
+    <Property Name="role_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="title" Type="nchar" MaxLength="72" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_fish_status_fishing_asset">
+    <End Role="fishing_asset" Type="Self.fishing_asset" Multiplicity="1" />
+    <End Role="fish_status" Type="Self.fish_status" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="fishing_asset">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="fish_status">
+        <PropertyRef Name="fishing_asset_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_fishing_asset_category">
+    <End Role="category" Type="Self.category" Multiplicity="1" />
+    <End Role="fishing_asset" Type="Self.fishing_asset" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="fishing_asset">
+        <PropertyRef Name="category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_fishing_tourists_employee">
+    <End Role="employee" Type="Self.employee" Multiplicity="1" />
+    <End Role="fishing_tourists" Type="Self.fishing_tourists" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="employee">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="fishing_tourists">
+        <PropertyRef Name="employee_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_fishing_tourists_fishing_asset">
+    <End Role="fishing_asset" Type="Self.fishing_asset" Multiplicity="1" />
+    <End Role="fishing_tourists" Type="Self.fishing_tourists" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="fishing_asset">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="fishing_tourists">
+        <PropertyRef Name="fishing_asset_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_responsbilities_employee">
+    <End Role="employee" Type="Self.employee" Multiplicity="1" />
+    <End Role="responsbilities" Type="Self.responsbilities" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="employee">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="responsbilities">
+        <PropertyRef Name="employee_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_responsbilities_role">
+    <End Role="role" Type="Self.role" Multiplicity="1" />
+    <End Role="responsbilities" Type="Self.responsbilities" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="role">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="responsbilities">
+        <PropertyRef Name="role_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище FishingEliteModelContainer">
+    <EntitySet Name="category" EntityType="Self.category" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="employee" EntityType="Self.employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="fish_status" EntityType="Self.fish_status" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="fishing_asset" EntityType="Self.fishing_asset" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="fishing_tourists" EntityType="Self.fishing_tourists" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="responsbilities" EntityType="Self.responsbilities" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="role" EntityType="Self.role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_fish_status_fishing_asset" Association="Self.FK_fish_status_fishing_asset">
+      <End Role="fishing_asset" EntitySet="fishing_asset" />
+      <End Role="fish_status" EntitySet="fish_status" />
+    </AssociationSet>
+    <AssociationSet Name="FK_fishing_asset_category" Association="Self.FK_fishing_asset_category">
+      <End Role="category" EntitySet="category" />
+      <End Role="fishing_asset" EntitySet="fishing_asset" />
+    </AssociationSet>
+    <AssociationSet Name="FK_fishing_tourists_employee" Association="Self.FK_fishing_tourists_employee">
+      <End Role="employee" EntitySet="employee" />
+      <End Role="fishing_tourists" EntitySet="fishing_tourists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_fishing_tourists_fishing_asset" Association="Self.FK_fishing_tourists_fishing_asset">
+      <End Role="fishing_asset" EntitySet="fishing_asset" />
+      <End Role="fishing_tourists" EntitySet="fishing_tourists" />
+    </AssociationSet>
+    <AssociationSet Name="FK_responsbilities_employee" Association="Self.FK_responsbilities_employee">
+      <End Role="employee" EntitySet="employee" />
+      <End Role="responsbilities" EntitySet="responsbilities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_responsbilities_role" Association="Self.FK_responsbilities_role">
+      <End Role="role" EntitySet="role" />
+      <End Role="responsbilities" EntitySet="responsbilities" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
